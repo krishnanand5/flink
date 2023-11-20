@@ -161,8 +161,9 @@ public class HiveRunnerITCase {
                     .await();
             List<String> result = hiveShell.executeQuery("select * from dest");
             assertThat(result).hasSize(1);
-            assertThat(result.get(0))
-                    .isEqualTo("[1,2,3]\t{1:\"a\",2:\"b\"}\t{\"f1\":3,\"f2\":\"c\"}");
+            String expected1 = "[1,2,3]\t{1:\"a\",2:\"b\"}\t{\"f1\":3,\"f2\":\"c\"}";
+            String expected2 = "[1,2,3]\t{2:\"b\",1:\"a\"}\t{\"f1\":3,\"f2\":\"c\"}";
+            assertThat(result.get(0)).isIn(expected1, expected2);
         } finally {
             tableEnv.executeSql("drop table dest");
         }
